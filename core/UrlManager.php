@@ -26,7 +26,11 @@ class UrlManager
 		$path_info = $_SERVER['PATH_INFO'];
 		$params = preg_split('#/#',substr($path_info, 1));
 		//r=c/a
-		$route =  $params[0] .'/'. $params[1];
+		$params[0] = isset($params[0])?$params[0]:'';
+		$params[1] = isset($params[1])?$params[1]:'';
+		// debug
+		// print_r($params);
+		$route = $params[0] .'/'. $params[1];
 		unset($params[0]);
 		unset($params[1]);
 		$params = array_values($params);
@@ -55,6 +59,7 @@ class UrlManager
 		// print_r($rules);
 		if($this->is_seo)
 		{
+			$url = dirname($_SERVER['SCRIPT_NAME']);
 			$url .= '/' . $r;
 			$g = array_keys($get);
 			$normal_query = array_diff($g, $rules);
