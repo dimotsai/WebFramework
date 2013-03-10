@@ -8,10 +8,12 @@ class MySQL
 	
 	public function __construct()
 	{
-		$this->_server = MYSQL_SERVER;
-		$this->_username = MYSQL_USERNAME;
-		$this->_password = MYSQL_PASSWORD;
-		$this->connect();
+		if(defined('MYSQL_SERVER') && defined('MYSQL_USERNAME') && defined('MYSQL_PASSWORD')){
+			$this->_server = MYSQL_SERVER;
+			$this->_username = MYSQL_USERNAME;
+			$this->_password = MYSQL_PASSWORD;
+			$this->connect();
+		}
 	}
 	
 	public function __destruct()
