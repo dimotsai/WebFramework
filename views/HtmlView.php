@@ -22,12 +22,16 @@ class HtmlView extends View
 		$content = ob_get_contents();
 		ob_end_clean();
 		
+		$errh = Application::app()->getErrorHandler();
+		$errors = $errh->isError()?$errh->render():'';
+
 		if($this->layout != null && !$partial)
 		{
 			ob_start();
 			include TEMPLATE_PATH . '/' . $this->layout . '.php';
 			$html = ob_get_contents();
 			unset($content);
+			unset($errors);
 			ob_end_clean();
 		}
 		else

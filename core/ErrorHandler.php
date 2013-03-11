@@ -1,21 +1,23 @@
 <?php
 class ErrorHandler
 {
-	protected $error;
+	protected $errors = array();
 	protected $backtrace;
-	
+	protected $is_error = false;
+	protected $custom_display = true;
 	public function handleError($errno, $errstr, $errfile, $errline)
 	{
+		$this->is_error = true;
 		if (!(error_reporting() & $errno)) {
 			// This error code is not included in error_reporting
 			return;
 		}
-		
+		$size = count($this->errors);
 		$backtrace = debug_backtrace();
 		
 		switch ($errno) {
 		case E_USER_ERROR:
-			$this->error =  "<h4><b>ERROR</b> [$errno] $errstr<br />"
+			$this->errors[$size] =  "<h4><b>ERROR</b> [$errno] $errstr<br />"
 			. "  Fatal error on line $errline in file $errfile"
 			. ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />"
 			. "Aborting...</h4>";
@@ -23,23 +25,23 @@ class ErrorHandler
 			exit(1);
 			break;
 		case E_USER_WARNING:
-			$this->error = "<h4><b>USER WARNING</b> [$errno] $errstr at $errfile on $errline</h4>";
+			$this->errors[$size] = "<h4><b>USER WARNING</b> [$errno] $errstr at $errfile on $errline</h4>";
 			break;
 
 		case E_USER_NOTICE:
-			$this->error = "<h4><b>USER NOTICE</b> [$errno] $errstr at $errfile on $errline</h4>";
+			$this->errors[$size] = "<h4><b>USER NOTICE</b> [$errno] $errstr at $errfile on $errline</h4>";
 			break;
 		case E_WARNING:
-			$this->error = "<h4><b>WARNING</b> [$errno] $errstr at $errfile on $errline</h4>";
+			$this->errors[$size] = "<h4><b>WARNING</b> [$errno] $errstr at $errfile on $errline</h4>";
 			break;
 		case E_NOTICE:
-			$this->error = "<h4><b>NOTICE</b> [$errno] $errstr at $errfile on $errline</h4>";
+			$this->errors[$size] = "<h4><b>NOTICE</b> [$errno] $errstr at $errfile on $errline</h4>";
 			break;
 		default:
-			$this->error = "<h4>Unknown error type: [$errno] $errstr at $errfile on $errline</h4>";
+			$this->errors[$size] = "<h4>Unknown error type: [$errno] $errstr at $errfile on $errline</h4>";
 			break;
 		}
-		$this->error .=  "<ul>";
+		$this->errors[$size] .=  "<ul>";
 		foreach($backtrace as $key => $item)
 		{
 			$args = array_map(function($i){
@@ -51,24 +53,28 @@ class ErrorHandler
 					return $i;
 			}, $item['args']);
 			$args = implode(',', $args );
-			$this->error .= "<li>#$key <b>{$item['class']}::{$item['function']}({$args})</b> called at <b>{$item['file']}</b> on <b>{$item['line']}</b> </li>";
+			$this->errors[$size] .= "<li>#$key <b>{$item['class']}::{$item['function']}({$args})</b> called at <b>{$item['file']}</b> on <b>{$item['line']}</b> </li>";
 		}
-		$this->error .= "</ul>";
+		$this->errors[$size] .= "</ul>";
 		
-		$this->render();
+		// $this->render();
 		
-		/* Don't execute <p></p>HP internal error handler */
+		/* Don't execute PHP internal error handler */
 		return true;
 	}
 	
 	public function handleException($e)
 	{
-		$this->error = $e->getMessage();
-		$this->render();
+		$this->errors[$size] = $e->getMessage();
+		// $this->render();
 	}
-	
+	public function isError(){
+		return $this->is_error;
+	}
+
 	public function render()
 	{
+		ob_start();
 ?>
 	<style type="text/css">
 		div#error-container
@@ -91,9 +97,15 @@ class ErrorHandler
 		}
 	</style>
 	<div id="error-container">
-<?php echo $this->error;?>
+		<?php 
+			echo implode('', $this->errors);
+		?>
 	</div>
 <?php
+		$result = ob_get_clean();
+		if(!$this->custom_display)
+			echo $result;
+		return $result;
 	}
 }
 ?>

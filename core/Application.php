@@ -95,6 +95,10 @@ class Application
 		return $this->_router->getAction();
 	}
 
+	public function getErrorHandler(){
+		return $this->_error_handler;
+	}
+
 	protected function initialSystemHandlers()
 	{
 		set_error_handler(array($this->_error_handler,'handleError'));
