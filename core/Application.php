@@ -7,6 +7,8 @@ class Application
 	private $_error_handler;
 	private $_configuration;
 	private $_url_manager;
+	private $_controller;
+
 	
 	public function __construct()
 	{
@@ -25,9 +27,9 @@ class Application
 		$this->_url_manager->prepoccess();
 		$this->_router->route();
 		$controller_name = $this->_router->getController();
-		$controller = new $controller_name();
-		$controller->setRouter($this->_router);
-		$controller->run();
+		$this->_controller = new $controller_name();
+		$this->_controller->setRouter($this->_router);
+		$this->_controller->run();
 		$this->_router = null;
 		$this->_mysql = null;
 	}
@@ -69,7 +71,7 @@ class Application
 	
 	public function redirect($url)
 	{
-		header("Location: index.php?r=$url");
+		header("Location: $url");
 	}
 	
 	public function configuration()
@@ -91,8 +93,8 @@ class Application
 		return $this->_router->getControllerName();
 	}
 
-	public function  getCurrentAction(){
-		return $this->_router->getAction();
+	public function getCurrentAction(){
+		return $this->_controller->getCurrentAction();
 	}
 
 	public function getErrorHandler(){

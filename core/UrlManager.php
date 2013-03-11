@@ -28,9 +28,7 @@ class UrlManager
 		//r=c/a
 		$params[0] = isset($params[0])?$params[0]:'';
 		$params[1] = isset($params[1])?$params[1]:'';
-		// debug
-		// print_r($params);
-		$route = $params[0] .'/'. $params[1];
+		$route =  $params[0] .'/'. $params[1];
 		unset($params[0]);
 		unset($params[1]);
 		$params = array_values($params);

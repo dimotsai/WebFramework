@@ -14,7 +14,7 @@ class Router
 		$route = isset($_GET['r'])?strtolower($_GET['r']):'site/index';
 		$patterns = explode('/', $route);
 		$this->controller = isset($patterns[0])&&!empty($patterns[0])?$patterns[0]:'site';
-		$this->action = isset($patterns[1])&&!empty($patterns[1])?$patterns[1]:'index';
+		$this->action = isset($patterns[1])&&!empty($patterns[1])?$patterns[1]:'';
 	}
 	
 	public function getController()
