@@ -21,8 +21,6 @@ class ErrorHandler
 			. "  Fatal error on line $errline in file $errfile"
 			. ", PHP " . PHP_VERSION . " (" . PHP_OS . ")<br />"
 			. "Aborting...</h4>";
-			$this->render();
-			exit(1);
 			break;
 		case E_USER_WARNING:
 			$this->errors[$size] = "<h4><b>USER WARNING</b> [$errno] $errstr at $errfile on $errline</h4>";
@@ -44,6 +42,7 @@ class ErrorHandler
 		$this->errors[$size] .=  "<ul>";
 		foreach($backtrace as $key => $item)
 		{
+			$args = isset($item['args'])?$item['args']:array();
 			$args = array_map(function($i){
 				if(is_array($i))
 					return 'Array ()';
@@ -51,7 +50,7 @@ class ErrorHandler
 					return get_class($i);
 				else
 					return $i;
-			}, $item['args']);
+			}, $args);
 			$args = implode(',', $args );
 			$this->errors[$size] .= "<li>#$key <b>{$item['class']}::{$item['function']}({$args})</b> called at <b>{$item['file']}</b> on <b>{$item['line']}</b> </li>";
 		}
@@ -105,6 +104,7 @@ class ErrorHandler
 		$result = ob_get_clean();
 		if(!$this->custom_display)
 			echo $result;
+	
 		return $result;
 	}
 }

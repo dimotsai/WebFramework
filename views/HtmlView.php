@@ -23,7 +23,10 @@ class HtmlView extends View
 		ob_end_clean();
 		
 		$errh = Application::app()->getErrorHandler();
-		$errors = $errh->isError()?$errh->render():'';
+		if(!Application::app()->configuration()->getConfig('production_mode'))
+			$errors = $errh->isError()?$errh->render():'';
+		else
+			$errors = '';
 
 		if($this->layout != null && !$partial)
 		{
