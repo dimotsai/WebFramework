@@ -4,7 +4,7 @@ class UrlManager
 	private $path_rules;
 	private $is_seo;
 	private $show_script_name;
-	private $suffix = '';
+	private $suffix = '.html';
 	public function __construct()
 	{
 		$c = Application::app()->configuration();
@@ -26,7 +26,11 @@ class UrlManager
 	{
 		if(!isset($_SERVER['PATH_INFO'])) return;
 		$path_info = $_SERVER['PATH_INFO'];
-		$params = preg_split('#/#',substr($path_info, 1));
+		$path_info = substr($path_info, 1);
+		//remove suffix
+		$path_info = str_replace($this->suffix, '', $path_info);
+		// printf($path_info);
+		$params = preg_split('#/#',$path_info);
 		//r=c/a
 		$params[0] = isset($params[0])?$params[0]:'';
 		$params[1] = isset($params[1])?$params[1]:'';
@@ -71,12 +75,18 @@ class UrlManager
 			$normal_query = array_map(function($key) use ($get){
 				return $key . '=' . $get[$key];
 			}, $normal_query);
-			
+
+			if(preg_match('/[\w\d]+\/[\w\d]+/', $r))
+				$url .= $this->suffix;
+
 			if(!empty($normal_query))
 				$url .= '?' . implode('&', $normal_query);
+
 		}
 		else
 		{
+			if(preg_match('/[\w\d]+\/[\w\d]+/', $r))
+				$url .= $this->suffix;
 			$url .= '?r=' . $r;
 			foreach($get as $name => $value)
 			{
