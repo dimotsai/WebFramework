@@ -3,12 +3,14 @@ class UrlManager
 {
 	private $path_rules;
 	private $is_seo;
+	private $show_script_name;
 	private $suffix = '';
 	public function __construct()
 	{
 		$c = Application::app()->configuration();
 		$this->path_rules = $c->getConfig('path_rules');
 		$this->is_seo = $c->getConfig('is_seo');
+		$this->show_script_name = $c->getConfig('show_script_name');
 		$this->suffix = $c->getConfig('url_suffix');
 	}
 
@@ -51,13 +53,13 @@ class UrlManager
 	
 	public function createUrl($r, $get = array())
 	{
-		$url = $_SERVER['SCRIPT_NAME'];
+		$url = $this->show_script_name?$_SERVER['SCRIPT_NAME']:dirname($_SERVER['SCRIPT_NAME']);
 		$route = $r;
 		$rules = isset($this->path_rules[$route])?$this->path_rules[$route]:array();
 		// print_r($rules);
 		if($this->is_seo)
 		{
-			$url = dirname($_SERVER['SCRIPT_NAME']);
+			$url = $this->show_script_name?$_SERVER['SCRIPT_NAME']:dirname($_SERVER['SCRIPT_NAME']);
 			$url .= '/' . $r;
 			$g = array_keys($get);
 			$normal_query = array_diff($g, $rules);
@@ -75,7 +77,7 @@ class UrlManager
 		}
 		else
 		{
-			$url = '?r=' . $r;
+			$url .= '?r=' . $r;
 			foreach($get as $name => $value)
 			{
 				$url .= '&' . $name . '=' . $value;
