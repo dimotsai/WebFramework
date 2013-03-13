@@ -2,7 +2,7 @@
 class HtmlView extends View
 {
 	protected $layout = null;
-	
+	public $title = APP_NAME;
 	public function __construct()
 	{
 		$this->layout = defined('LAYOUT_NAME') ? LAYOUT_NAME:'layout';
@@ -44,6 +44,7 @@ class HtmlView extends View
         
         return $html;
 	}
+
 	public function render()
 	{
 		// 因為 View 類別的 render 函式沒有參數
