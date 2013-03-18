@@ -57,13 +57,16 @@ class UrlManager
 	
 	public function createUrl($r, $get = array())
 	{
-		$url = $this->show_script_name?$_SERVER['SCRIPT_NAME']:dirname($_SERVER['SCRIPT_NAME']);
+		$http='http';
+		$host = $http . '://' . $_SERVER['SERVER_NAME'];
+		$url = $host . $_SERVER['SCRIPT_NAME'];
+		$url = $this->show_script_name?$url:dirname($url);
+		$url = rtrim(dirname($url),'\\/');
 		$route = $r;
 		$rules = isset($this->path_rules[$route])?$this->path_rules[$route]:array();
 		// print_r($rules);
 		if($this->is_seo)
 		{
-			$url = $this->show_script_name?$_SERVER['SCRIPT_NAME']:dirname($_SERVER['SCRIPT_NAME']);
 			$url .= '/' . $r;
 			$g = array_keys($get);
 			$normal_query = array_diff($g, $rules);
@@ -98,6 +101,8 @@ class UrlManager
 	
 	public function getBaseUrl()
 	{
-		return dirname($_SERVER['SCRIPT_NAME']);
+		$http='http';
+		$host = $http . '://' . $_SERVER['SERVER_NAME'];
+		return rtrim(dirname($host . $_SERVER['SCRIPT_NAME']),'\\/');
 	}
 }
