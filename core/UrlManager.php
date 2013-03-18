@@ -59,9 +59,10 @@ class UrlManager
 	{
 		$http='http';
 		$host = $http . '://' . $_SERVER['SERVER_NAME'];
-		$url = $host . $_SERVER['SCRIPT_NAME'];
+		$url = $_SERVER['SCRIPT_NAME'];
 		$url = $this->show_script_name?$url:dirname($url);
-		$url = rtrim(dirname($url),'\\/');
+		$url = rtrim($url,'\\/');
+		$url = $host . $url;
 		$route = $r;
 		$rules = isset($this->path_rules[$route])?$this->path_rules[$route]:array();
 		// print_r($rules);
@@ -84,7 +85,6 @@ class UrlManager
 
 			if(!empty($normal_query))
 				$url .= '?' . implode('&', $normal_query);
-
 		}
 		else
 		{
