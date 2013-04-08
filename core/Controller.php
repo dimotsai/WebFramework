@@ -11,7 +11,7 @@ abstract class Controller
 		if (method_exists($this, ($action = $router->getAction())))
 			$this->action = $action;
 		else
-			$this->action = $this->action?:'index';
+			$this->action = $this->action?:$this->getDefaultAction();
 	}
 	
 	public final function run()
@@ -22,9 +22,15 @@ abstract class Controller
 	protected function redirectTo($url)
 	{
 		header('Location: ' . $url);
+		exit();
 	}
 
 	public function getCurrentAction(){
+		return $this->action;
+	}
+
+	public function getDefaultAction(){
+		if(!$this->action) $this->action = 'index';
 		return $this->action;
 	}
 }
