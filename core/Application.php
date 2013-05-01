@@ -8,6 +8,7 @@ class Application
 	private $_configuration;
 	private $_url_manager;
 	private $_controller;
+	private $_user_identity;
 
 	
 	public function __construct()
@@ -54,6 +55,12 @@ class Application
 		}
 		return false;
 	}
+
+	protected function initialSystemHandlers()
+	{
+		set_error_handler(array($this->_error_handler,'handleError'));
+		set_exception_handler(array($this->_error_handler,'handleException'));
+	}
 	
 	protected function loadComponents()
 	{
@@ -62,26 +69,17 @@ class Application
 		$this->_router = new Router();
 		$this->_mysql = new MySQL();
 		$this->_error_handler = new ErrorHandler();
-	}
-	
-	public function getDb()
-	{
-		return $this->_mysql;
-	}
-	
-	public function redirect($url)
-	{
-		header("Location: $url");
-	}
-	
-	public function configuration()
-	{
-		return $this->_configuration;
+		$this->_user_identity = new UserIdentity();
 	}
 	
 	public function createUrl($r, $get = array())
 	{
 		return $this->_url_manager->createUrl($r, $get);
+	}
+	
+	public function getDb()
+	{
+		return $this->_mysql;
 	}
 	
 	public function getBaseUrl()
@@ -100,12 +98,19 @@ class Application
 	public function getErrorHandler(){
 		return $this->_error_handler;
 	}
-
-	protected function initialSystemHandlers()
+	
+	public function getUserIdentity()
 	{
-		set_error_handler(array($this->_error_handler,'handleError'));
-		set_exception_handler(array($this->_error_handler,'handleException'));
+		return $this->_user_identity;
+	}
+
+	public function redirect($url)
+	{
+		header("Location: $url");
 	}
 	
-
+	public function configuration()
+	{
+		return $this->_configuration;
+	}
 }
