@@ -37,6 +37,11 @@ class MySQL
 		return $this->_database_source->prepare($statement, $driver_options);
 	}
 	
+	public function lastInsertId()
+	{
+		return $this->_database_source->lastInsertId();
+	}
+
 	public function errorInfo()
 	{
 		return $this->_database_source->errorInfo();
