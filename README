@@ -1,0 +1,13 @@
+Installation
+============
+Create folders like this:
+
+assets/
+components/
+controllers/
+databases/
+files/
+models/
+templates/
+theme/
+views/
