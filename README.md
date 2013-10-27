@@ -18,7 +18,7 @@ Installation
 
 4. Modified SiteController.php
 
-``` php
+  ``` php
   <?php
   class SiteController extends Controller
   {
@@ -34,6 +34,6 @@ Installation
   		$this->view->render('index');
   	}
   }
-```
+  ```
 
 5. enjoy
