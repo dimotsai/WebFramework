@@ -3,9 +3,9 @@
 define( 'APP_REAL_PATH', str_replace( '\\', '/', dirname( __FILE__ ) ) );
 define( 'APP_NAME', 'mysite' );
 
-define( 'MYSQL_SERVER', 'mysql:host=localhost;dbname=name' );
-define( 'MYSQL_USERNAME', 'username' );
-define( 'MYSQL_PASSWORD', 'password' );
+# define( 'MYSQL_SERVER', 'mysql:host=localhost;dbname=name' );
+# define( 'MYSQL_USERNAME', 'username' );
+# define( 'MYSQL_PASSWORD', 'password' );
 
 define( 'TEMPLATE_PATH', './templates' );
 
