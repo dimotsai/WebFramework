@@ -1,16 +1,15 @@
 Installation
 ============
 1. Create folders like these:
-
-* assets/
-* components/
-* controllers/
-* databases/
-* files/
-* models/
-* templates/
-* theme/
-* views/
+  * assets/
+  * components/
+  * controllers/
+  * databases/
+  * files/
+  * models/
+  * templates/
+  * theme/
+  * views/
 
 2. Copy ./config.sample.php to ./config.php and then modify it
 
